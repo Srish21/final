@@ -24,6 +24,7 @@ if($action == "show_login_page")
 }else if ($action == 'registrar')
 {
  // echo " we want to create a new account";
+ //still new
   $name = filter_input(INPUT_POST, 'reg_uname');
   if(isset($name))
   {
@@ -32,6 +33,7 @@ if($action == "show_login_page")
      if($exit == true)
      {
        include('user_exit.php');
+       
      }else {
        header("Location: login.php");
      }
