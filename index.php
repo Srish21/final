@@ -2,6 +2,7 @@
 require('db_connection.php');
 require('db.php');
 $action = filter_input(INPUT_POST, "action");
+//echo "action = $action";
 if($action == NULL)
 {
   $action = "show_login_page";
@@ -25,11 +26,12 @@ if($action == "show_login_page")
 {
  // echo " we want to create a new account";
  //still new
-  $name = filter_input(INPUT_POST, 'reg_uname');
+  $name = filter_input(INPUT_POST, 'email');
   if(isset($name))
   {
-     $pass = filter_input(INPUT_POST, 'reg_password');
+     $pass = filter_input(INPUT_POST, 'password');
      $exit = createUser($name,$pass);
+     
      if($exit == true)
      {
        include('user_exit.php');
@@ -39,8 +41,34 @@ if($action == "show_login_page")
      }
   }
 }else if ($action == 'add')
-{
 
+{
+   if (isset($_POST['description']) and $_POST['description']!='')
+     {
+      
+      addTodoItem($_COOKIE['my_id'],$_POST['description']);
+     }
+     $result = getTodoItems($_COOKIE['my_id']);
+      include('list.php');
+}
+else if($action == 'Delete') {
+      if(isset($_POST['item_id'])){
+        $selected = $_POST['item_id'];
+    echo $_POST['item_id'].$_COOKIE['my_id'];
+        deleteTodoItems($_COOKIE['my_id'],$selected);
+        
+    $result = getTodoItems($_COOKIE['my_id']);
+    include('list.php');
+      
 
 }
+}
+else if($action == 'edit') {
+  $item_id = $_POST['item_id'];
+  $new_description = $_POST['new_description'];
+  editTodoItem($item_id,$new_description);
+  $result = getTodoItems($_COOKIE['my_id']);
+  include('list.php');
+}
+
 ?>
