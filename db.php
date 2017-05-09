@@ -7,9 +7,19 @@
      $statement->bindValue(':todo_text',$todo_text);
      $statement->execute();
      $statement->closeCursor();
+     }
+    function deleteTodoItems($user_id,$todo_id){
+     global $db;
+     $query ='delete from `ss3545`.todos where id = :todo_id and user_id= :userid';
+     $statement = $db->prepare($query);
+     $statement->bindValue(':userid',$user_id);
+     $statement->bindValue(':todo_id',$todo_id); 
+     $statement->execute();
+     $statement->closeCursor();
+     }
      
 
-   }
+   
    function getTodoItems($user_id){
      global $db;
      $query = 'select * from todos where user_id= :userid';
@@ -20,6 +30,17 @@
      $statement->closeCursor();
      return $result;
    }
+
+    function editTodoItem($item_id,$new_description) {
+      global $db;
+      $query = 'update todos set todo_item = :new_description where id=:userid';
+      $statement = $db->prepare($query);
+      $statement->bindValue(':userid',$item_id);
+      $statement->bindValue(':new_description',$new_description);
+      $statement->execute();
+      $statement->closeCursor();
+    }
+
    function createUser($username, $password){
      global $db;
      $query = 'select * from users where username = :name ';
@@ -35,6 +56,7 @@
      }else{
      $query = 'insert into users (username,passwordHash) values
         (:name, :pass)';
+        echo "within code";
      $statement = $db->prepare($query);
      $statement->bindValue(':name',$username);
      $statement->bindValue(':pass',$password);
